@@ -107,14 +107,4 @@ Configuración de seguridad:
 El endpoint /api/v1/auth/login está permitido sin autenticación.
 Todos los demás endpoints requieren un token JWT válido.
 Pruebas
-Para ejecutar las pruebas en el proyecto, puedes usar Maven:
-
-bash
-mvn test
-Contribuir
-Si deseas contribuir a este proyecto, por favor sigue estos pasos:
-
-Haz un fork del repositorio.
-Crea una nueva rama (git checkout -b feature/nueva-funcionalidad).
-Realiza tus cambios y asegúrate de que todo esté funcionando correctamente.
-Realiza un pull request para fusionar tus cambios.
+Para ejecutar las pruebas en el proyecto, puedes usar Maven y postman
