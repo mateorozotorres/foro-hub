@@ -15,20 +15,41 @@ Requisitos previos
 Java 17 o superior.
 Maven para la gestión de dependencias y la construcción del proyecto.
 MySQL para la base de datos.
-Instalación
-Clona este repositorio:
-bash
-Copiar
-Editar
-git clone https://github.com/tu-usuario/foro-api-jwt.git
-cd foro-api-jwt
+
+* BD
+CREATE TABLE responses (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    content TEXT NOT NULL,
+    topic_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE topics (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    user_id BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role ENUM('USER', 'ADMIN') DEFAULT 'USER',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 Configura la base de datos MySQL:
 
-Crea una base de datos llamada forohub en MySQL y proporciona las credenciales correctas en el archivo application.properties.
+Crea la base de datos llamada forohub en MySQL y proporciona las credenciales correctas en el archivo application.properties.
 
-properties
-Copiar
-Editar
 spring.datasource.url=jdbc:mysql://localhost:3306/forohub
 spring.datasource.username=root
 spring.datasource.password=tu-contraseña
@@ -38,9 +59,6 @@ Compila y ejecuta el proyecto:
 
 Usa Maven para compilar y ejecutar la aplicación:
 
-bash
-Copiar
-Editar
 mvn clean install
 mvn spring-boot:run
 Esto iniciará el servidor en http://localhost:8080.
@@ -53,16 +71,12 @@ Este endpoint permite a los usuarios iniciar sesión proporcionando un nombre de
 
 Request Body (JSON):
 json
-Copiar
-Editar
 {
   "username": "admin",
   "password": "admin123"
 }
 Response (JSON):
 json
-Copiar
-Editar
 {
   "token": "<TOKEN>"
 }
@@ -73,13 +87,9 @@ Este endpoint está protegido y requiere un token JWT válido. El token debe env
 
 Request Header:
 plaintext
-Copiar
-Editar
 Authorization: Bearer <TOKEN>
 Response (si el token es válido):
 json
-Copiar
-Editar
 {
   "message": "Acceso permitido"
 }
@@ -87,8 +97,6 @@ Editar
 Si el token JWT no se proporciona o es inválido, el servidor devolverá una respuesta con un código de estado 401 (Unauthorized).
 
 json
-Copiar
-Editar
 {
   "error": "Unauthorized"
 }
@@ -102,8 +110,6 @@ Pruebas
 Para ejecutar las pruebas en el proyecto, puedes usar Maven:
 
 bash
-Copiar
-Editar
 mvn test
 Contribuir
 Si deseas contribuir a este proyecto, por favor sigue estos pasos:
